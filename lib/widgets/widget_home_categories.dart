@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:grocery_app/models/category.dart';
 import 'package:grocery_app/models/pagination.dart';
 
+import '../models/product_filter.dart';
 import '../providers.dart';
 
 class HomeCategoriesWidget extends ConsumerWidget {
@@ -32,7 +33,7 @@ class HomeCategoriesWidget extends ConsumerWidget {
 
     return categoryProvider.when(data: (list) {
       if (list != null && list.isNotEmpty) {
-        return _buildCategoryList(list);
+        return _buildCategoryList(list, ref);
       } else {
         // Handle the case where the list is null or empty
         return const Center(child: Text("No categories available."));
@@ -46,7 +47,7 @@ class HomeCategoriesWidget extends ConsumerWidget {
     });
   }
 
-  Widget _buildCategoryList(List<Category> categories) {
+  Widget _buildCategoryList(List<Category> categories, WidgetRef ref) {
     return Container(
         height: 100,
         alignment: Alignment.centerLeft,
@@ -59,6 +60,13 @@ class HomeCategoriesWidget extends ConsumerWidget {
               var data = categories[index];
               return GestureDetector(
                   onTap: () {
+                    ProductFilterModel filterModel = ProductFilterModel(
+                        paginationModel: PaginationModel(page: 1, pageSize: 10),
+                        categoryId: data.categoryId);
+                    ref
+                        .read(productFilterProvider.notifier)
+                        .setProductFilter(filterModel);
+                    ref.read(productNotifierProvider.notifier).getProducts();
                     Navigator.of(context).pushNamed("/products", arguments: {
                       "categoryId": data.categoryId,
                       "categoryName": data.categoryName

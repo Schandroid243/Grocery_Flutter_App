@@ -28,14 +28,15 @@ class ProductsNotifier extends StateNotifier<ProductsState> {
     if (products.length % 10 != 0 || products.isEmpty) {
       state = state.copyWith(hasNext: false);
     }
-
-    state = state.copyWith(products: newProducts);
-    _page++;
-    state = state.copyWith(isLoading: false);
+    Future.delayed(const Duration(milliseconds: 1500), () {
+      state = state.copyWith(products: newProducts);
+      _page++;
+      state = state.copyWith(isLoading: false);
+    });
   }
 
   Future<void> refreshProducts() async {
-    state = state.copyWith(products: [], hasNext: false);
+    state = state.copyWith(products: [], hasNext: true);
 
     _page = 1;
 

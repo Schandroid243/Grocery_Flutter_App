@@ -3,6 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:grocery_app/models/product_sort.dart';
 
+import '../components/product_card.dart';
 import '../models/pagination.dart';
 import '../models/product_filter.dart';
 import '../providers.dart';
@@ -32,7 +33,8 @@ class _ProductsPageState extends State<ProductsPage> {
               _ProductFilter(
                 categoryId: categoryId,
                 categoryName: categoryName,
-              )
+              ),
+              Flexible(flex: 1, child: _ProductList())
             ],
           )),
     );
@@ -91,6 +93,8 @@ class _ProductFilter extends ConsumerWidget {
                   ref
                       .read(productFilterProvider.notifier)
                       .setProductFilter(filterModel);
+
+                  ref.read(productNotifierProvider.notifier).getProducts();
                 },
                 initialValue: filterProvider.sortBy,
                 itemBuilder: (BuildContext context) {
@@ -107,9 +111,23 @@ class _ProductFilter extends ConsumerWidget {
 }
 
 class _ProductList extends ConsumerWidget {
+  final ScrollController _scrollConroller = ScrollController();
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final productState = ref.watch(productNotifierProvider);
+
+    _scrollConroller.addListener(() {
+      if (_scrollConroller.position.pixels ==
+          _scrollConroller.position.maxScrollExtent) {
+        final productsViewModel = ref.read(productNotifierProvider.notifier);
+        final productsState = ref.watch(productNotifierProvider);
+
+        if (productsState.hasNext) {
+          productsViewModel.getProducts();
+        }
+      }
+    });
 
     if (productState.products.isEmpty) {
       if (!productState.hasNext && !productState.isLoading) {
@@ -117,18 +135,28 @@ class _ProductList extends ConsumerWidget {
       }
       return const LinearProgressIndicator();
     }
-    return Column(
-      children: [
-        Flexible(
-          flex: 1,
-          child: GridView.count(
-            crossAxisCount: 2,
-            children: List.generate(productState.products.length, (index) {
-              
-            })
-          )
-        )
-      ],
-    )
+    return RefreshIndicator(
+      onRefresh: () async {
+        ref.read(productNotifierProvider.notifier).refreshProducts();
+      },
+      child: Column(
+        children: [
+          Flexible(
+              flex: 1,
+              child: GridView.count(
+                  controller: _scrollConroller,
+                  crossAxisCount: 2,
+                  children:
+                      List.generate(productState.products.length, (index) {
+                    return ProductCard(model: productState.products[index]);
+                  }))),
+          Visibility(
+              visible:
+                  productState.isLoading && productState.products.isNotEmpty,
+              child: const SizedBox(
+                  height: 35, width: 35, child: CircularProgressIndicator()))
+        ],
+      ),
+    );
   }
 }
