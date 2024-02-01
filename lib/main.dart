@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:grocery_app/pages/register_page.dart';
 
 import 'pages/home_page.dart';
 import 'pages/products_page.dart';
@@ -23,6 +24,7 @@ class MyApp extends StatelessWidget {
       ),
       home: const HomePage(),
       routes: <String, WidgetBuilder>{
+        '/register': (BuildContext context) => const RegisterPage(),
         '/products': (BuildContext context) => const ProductsPage()
       },
     );
