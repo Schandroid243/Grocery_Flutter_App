@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:grocery_app/api/api_service.dart';
 import 'package:grocery_app/config.dart';
@@ -232,6 +233,8 @@ class _RegisterPageState extends State<RegisterPage> {
                             "Your account has been created successfully",
                             "Ok", () {
                           Navigator.of(context).pop();
+                          Navigator.of(context).pushNamedAndRemoveUntil(
+                              "/login", (route) => false);
                         });
                       } else {
                         FormHelper.showSimpleAlertDialog(
@@ -255,15 +258,20 @@ class _RegisterPageState extends State<RegisterPage> {
               ),
               Center(
                 child: RichText(
-                  text: const TextSpan(
-                      style: TextStyle(color: Colors.black, fontSize: 14),
+                  text: TextSpan(
+                      style: const TextStyle(color: Colors.black, fontSize: 14),
                       children: <TextSpan>[
-                        TextSpan(text: "Already have an account ?"),
+                        const TextSpan(text: "Already have an account ?"),
                         TextSpan(
                             text: "Sign in",
-                            style: TextStyle(
+                            style: const TextStyle(
                                 color: Colors.deepOrange,
-                                fontWeight: FontWeight.bold))
+                                fontWeight: FontWeight.bold),
+                            recognizer: TapGestureRecognizer()
+                              ..onTap = () {
+                                Navigator.of(context).pushNamedAndRemoveUntil(
+                                    "/login", (route) => false);
+                              })
                       ]),
                 ),
               )
