@@ -141,7 +141,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     password = onSavedVal.toString().trim();
                   },
                   showPrefixIcon: true,
-                  prefixIcon: const Icon(Icons.face),
+                  prefixIcon: const Icon(Icons.lock_open),
                   borderRadius: 10,
                   contentPadding: 15,
                   fontSize: 14,
@@ -185,7 +185,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   confirmPassword = onSavedVal.toString().trim();
                 },
                 showPrefixIcon: true,
-                prefixIcon: const Icon(Icons.face),
+                prefixIcon: const Icon(Icons.lock_open),
                 borderRadius: 10,
                 contentPadding: 15,
                 fontSize: 14,

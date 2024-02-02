@@ -2,6 +2,8 @@ import 'dart:convert';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:grocery_app/config.dart';
+import 'package:grocery_app/models/login_response_model.dart';
+import 'package:grocery_app/utils/shared_service.dart';
 import 'package:http/http.dart' as http;
 
 import '../models/category.dart';
@@ -86,6 +88,25 @@ class APIService {
             {"fullName": fullName, "email": email, "password": password}));
 
     if (response.statusCode == 200) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  static Future<bool> loginUser(String email, String password) async {
+    Map<String, String> requestHeaders = {
+      'Content-Type': 'application/json',
+    };
+
+    var baseUrl = "${Config.apiUrl}/${Config.loginAPI}";
+    var uri = Uri.parse(baseUrl);
+    var response = await client.post(uri,
+        headers: requestHeaders,
+        body: jsonEncode({"email": email, "password": password}));
+
+    if (response.statusCode == 200) {
+      await SharedService.setLoginDetails(loginResponseJson(response.body));
       return true;
     } else {
       return false;
