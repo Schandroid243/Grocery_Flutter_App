@@ -2,6 +2,8 @@ import 'dart:convert';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:grocery_app/config.dart';
+import 'package:grocery_app/models/login_response_model.dart';
+import 'package:grocery_app/utils/shared_service.dart';
 import 'package:http/http.dart' as http;
 
 import '../models/category.dart';
@@ -104,6 +106,7 @@ class APIService {
         body: jsonEncode({"email": email, "password": password}));
 
     if (response.statusCode == 200) {
+      await SharedService.setLoginDetails(loginResponseJson(response.body));
       return true;
     } else {
       return false;
