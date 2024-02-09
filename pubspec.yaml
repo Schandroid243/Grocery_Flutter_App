@@ -44,6 +44,7 @@ dependencies:
   json_serializable: ^6.7.1
   snippet_coder_utils: ^1.0.15
   api_cache_manager: ^1.0.2
+  carousel_slider: ^4.0.0
 
 dev_dependencies:
   flutter_test:
