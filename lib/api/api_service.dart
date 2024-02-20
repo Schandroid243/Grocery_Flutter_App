@@ -9,6 +9,7 @@ import 'package:http/http.dart' as http;
 import '../models/category.dart';
 import '../models/product.dart';
 import '../models/product_filter.dart';
+import '../models/slider.dart';
 
 final apiService = Provider((ref) => APIService());
 
@@ -110,6 +111,30 @@ class APIService {
       return true;
     } else {
       return false;
+    }
+  }
+
+  Future<List<SliderModel>?> getSliders(page, pageSize) async {
+    Map<String, String> requestHeaders = {
+      'Content-Type': 'application/json',
+    };
+
+    Map<String, String> queryString = {
+      'page': page.toString(),
+      'pageSize': pageSize.toString(),
+    };
+
+    var baseUrl = "${Config.apiUrl}/${Config.sliderAPI}";
+    var uri = Uri.parse(baseUrl).replace(queryParameters: queryString);
+
+    var response = await client.get(uri, headers: requestHeaders);
+
+    if (response.statusCode == 200) {
+      var data = jsonDecode(response.body);
+
+      return SlidersFromJson(data["data"]);
+    } else {
+      return null;
     }
   }
 }
