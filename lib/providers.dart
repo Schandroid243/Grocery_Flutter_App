@@ -8,6 +8,7 @@ import '../models/category.dart';
 import '../models/product.dart';
 import 'application/notifier/product_notifier.dart';
 import 'application/state/product_state.dart';
+import 'models/slider.dart';
 
 final categoriesProvider =
     FutureProvider.family<List<Category>?, PaginationModel>(
@@ -34,3 +35,10 @@ final productNotifierProvider =
     StateNotifierProvider<ProductsNotifier, ProductsState>((ref) =>
         ProductsNotifier(
             ref.watch(apiService), ref.watch(productFilterProvider)));
+
+final slidersProvider =
+    FutureProvider.family<List<SliderModel>?, PaginationModel>(
+        (ref, paginationModel) {
+  final sliderRepo = ref.watch(apiService);
+  return sliderRepo.getSliders(paginationModel.page, paginationModel.pageSize);
+});
