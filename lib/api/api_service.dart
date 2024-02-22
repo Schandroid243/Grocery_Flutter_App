@@ -141,4 +141,23 @@ class APIService {
       return null;
     }
   }
+
+  Future<Product?> getProductDetails(String productId) async {
+    Map<String, String> requestHeaders = {
+      'Content-Type': 'application/json',
+    };
+
+    var baseUrl = "${Config.apiUrl}/${Config.productAPI}/$productId";
+    var uri = Uri.parse(baseUrl);
+
+    var response = await client.get(uri, headers: requestHeaders);
+
+    if (response.statusCode == 200) {
+      var data = jsonDecode(response.body);
+
+      return Product.fromJson(data["data"]);
+    } else {
+      return null;
+    }
+  }
 }
