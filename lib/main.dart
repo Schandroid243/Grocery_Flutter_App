@@ -6,6 +6,7 @@ import 'package:grocery_app/utils/shared_service.dart';
 import 'pages/dashboard_page.dart';
 import 'pages/home_page.dart';
 import 'pages/login_page.dart';
+import 'pages/product_details_page.dart';
 import 'pages/products_page.dart';
 
 Widget _defaultHome = const LoginPage();
@@ -40,6 +41,8 @@ class MyApp extends StatelessWidget {
         '/login': (BuildContext context) => const LoginPage(),
         '/products': (BuildContext context) => const ProductsPage(),
         '/home': (BuildContext context) => const HomePage(),
+        '/product-details': (BuildContext context) =>
+            const ProductDetailsPage(),
       },
     );
   }
