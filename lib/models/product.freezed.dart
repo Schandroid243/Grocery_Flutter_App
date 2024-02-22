@@ -30,6 +30,7 @@ mixin _$Product {
   String get productType => throw _privateConstructorUsedError;
   String get stockStatus => throw _privateConstructorUsedError;
   String get productId => throw _privateConstructorUsedError;
+  List<String>? get relatedProducts => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -51,7 +52,8 @@ abstract class $ProductCopyWith<$Res> {
       String productSKU,
       String productType,
       String stockStatus,
-      String productId});
+      String productId,
+      List<String>? relatedProducts});
 
   $CategoryCopyWith<$Res> get category;
 }
@@ -79,6 +81,7 @@ class _$ProductCopyWithImpl<$Res, $Val extends Product>
     Object? productType = null,
     Object? stockStatus = null,
     Object? productId = null,
+    Object? relatedProducts = freezed,
   }) {
     return _then(_value.copyWith(
       productName: null == productName
@@ -121,6 +124,10 @@ class _$ProductCopyWithImpl<$Res, $Val extends Product>
           ? _value.productId
           : productId // ignore: cast_nullable_to_non_nullable
               as String,
+      relatedProducts: freezed == relatedProducts
+          ? _value.relatedProducts
+          : relatedProducts // ignore: cast_nullable_to_non_nullable
+              as List<String>?,
     ) as $Val);
   }
 
@@ -150,7 +157,8 @@ abstract class _$$ProductImplCopyWith<$Res> implements $ProductCopyWith<$Res> {
       String productSKU,
       String productType,
       String stockStatus,
-      String productId});
+      String productId,
+      List<String>? relatedProducts});
 
   @override
   $CategoryCopyWith<$Res> get category;
@@ -177,6 +185,7 @@ class __$$ProductImplCopyWithImpl<$Res>
     Object? productType = null,
     Object? stockStatus = null,
     Object? productId = null,
+    Object? relatedProducts = freezed,
   }) {
     return _then(_$ProductImpl(
       productName: null == productName
@@ -219,6 +228,10 @@ class __$$ProductImplCopyWithImpl<$Res>
           ? _value.productId
           : productId // ignore: cast_nullable_to_non_nullable
               as String,
+      relatedProducts: freezed == relatedProducts
+          ? _value._relatedProducts
+          : relatedProducts // ignore: cast_nullable_to_non_nullable
+              as List<String>?,
     ));
   }
 }
@@ -236,7 +249,9 @@ class _$ProductImpl implements _Product {
       required this.productSKU,
       required this.productType,
       required this.stockStatus,
-      required this.productId});
+      required this.productId,
+      final List<String>? relatedProducts})
+      : _relatedProducts = relatedProducts;
 
   factory _$ProductImpl.fromJson(Map<String, dynamic> json) =>
       _$$ProductImplFromJson(json);
@@ -261,10 +276,19 @@ class _$ProductImpl implements _Product {
   final String stockStatus;
   @override
   final String productId;
+  final List<String>? _relatedProducts;
+  @override
+  List<String>? get relatedProducts {
+    final value = _relatedProducts;
+    if (value == null) return null;
+    if (_relatedProducts is EqualUnmodifiableListView) return _relatedProducts;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(value);
+  }
 
   @override
   String toString() {
-    return 'Product(productName: $productName, category: $category, productShortDescription: $productShortDescription, productPrice: $productPrice, productSalePrice: $productSalePrice, productImage: $productImage, productSKU: $productSKU, productType: $productType, stockStatus: $stockStatus, productId: $productId)';
+    return 'Product(productName: $productName, category: $category, productShortDescription: $productShortDescription, productPrice: $productPrice, productSalePrice: $productSalePrice, productImage: $productImage, productSKU: $productSKU, productType: $productType, stockStatus: $stockStatus, productId: $productId, relatedProducts: $relatedProducts)';
   }
 
   @override
@@ -292,7 +316,9 @@ class _$ProductImpl implements _Product {
             (identical(other.stockStatus, stockStatus) ||
                 other.stockStatus == stockStatus) &&
             (identical(other.productId, productId) ||
-                other.productId == productId));
+                other.productId == productId) &&
+            const DeepCollectionEquality()
+                .equals(other._relatedProducts, _relatedProducts));
   }
 
   @JsonKey(ignore: true)
@@ -308,7 +334,8 @@ class _$ProductImpl implements _Product {
       productSKU,
       productType,
       stockStatus,
-      productId);
+      productId,
+      const DeepCollectionEquality().hash(_relatedProducts));
 
   @JsonKey(ignore: true)
   @override
@@ -335,7 +362,8 @@ abstract class _Product implements Product {
       required final String productSKU,
       required final String productType,
       required final String stockStatus,
-      required final String productId}) = _$ProductImpl;
+      required final String productId,
+      final List<String>? relatedProducts}) = _$ProductImpl;
 
   factory _Product.fromJson(Map<String, dynamic> json) = _$ProductImpl.fromJson;
 
@@ -359,6 +387,8 @@ abstract class _Product implements Product {
   String get stockStatus;
   @override
   String get productId;
+  @override
+  List<String>? get relatedProducts;
   @override
   @JsonKey(ignore: true)
   _$$ProductImplCopyWith<_$ProductImpl> get copyWith =>
