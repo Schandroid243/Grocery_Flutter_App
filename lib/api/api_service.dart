@@ -60,6 +60,10 @@ class APIService {
       queryString["sort"] = productFilterModel.sortBy!;
     }
 
+    if (productFilterModel.productIds != null) {
+      queryString["productIds"] = productFilterModel.productIds!.join(",");
+    }
+
     var baseUrl = "${Config.apiUrl}/${Config.productAPI}";
     var uri = Uri.parse(baseUrl).replace(queryParameters: queryString);
 
