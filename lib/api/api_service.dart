@@ -54,14 +54,17 @@ class APIService {
 
     if (productFilterModel.categoryId != null) {
       queryString["categoryId"] = productFilterModel.categoryId!;
+      print("Query string 1 is: $queryString");
     }
 
     if (productFilterModel.sortBy != null) {
       queryString["sort"] = productFilterModel.sortBy!;
+      print("Query string 2 is: $queryString");
     }
 
     if (productFilterModel.productIds != null) {
       queryString["productIds"] = productFilterModel.productIds!.join(",");
+      print("Query string 3 is: $queryString");
     }
 
     var baseUrl = "${Config.apiUrl}/${Config.productAPI}";

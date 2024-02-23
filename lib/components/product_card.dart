@@ -43,7 +43,7 @@ class ProductCard extends StatelessWidget {
                       child: Image.network(model!.fullImagePath,
                           fit: BoxFit.cover)),
                   onTap: () {
-                    Navigator.of(context).pushNamed("product-details",
+                    Navigator.of(context).pushNamed("/product-details",
                         arguments: {"productId": model!.productId});
                   },
                 ),

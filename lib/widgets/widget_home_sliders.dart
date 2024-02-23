@@ -24,7 +24,11 @@ class HomeSliderWidget extends ConsumerWidget {
         data: (list) {
           return imageCarousel(list!);
         },
-        error: (_, __) => const Center(child: Text('Error')),
+        error: (error, stackTrace) {
+          print('Error: $error');
+          print('Stack Trace: $stackTrace');
+          return Center(child: Text("Something went wrong! Error: $error"));
+        },
         loading: () => const Center(
               child: CircularProgressIndicator(),
             ));
