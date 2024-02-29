@@ -9,7 +9,7 @@ part of 'category.dart';
 _$CategoryImpl _$$CategoryImplFromJson(Map<String, dynamic> json) =>
     _$CategoryImpl(
       categoryName: json['categoryName'] as String,
-      categoryImage: json['categoryImage'] as String,
+      categoryImage: json['categoryImage'] as String?,
       categoryId: json['categoryId'] as String,
     );
 
