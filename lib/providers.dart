@@ -1,6 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:grocery_app/api/api_service.dart';
+import 'package:grocery_app/application/notifier/cart_notifier.dart';
 import 'package:grocery_app/application/notifier/product_filter_notifier.dart';
+import 'package:grocery_app/application/state/cart_state.dart';
 import 'package:grocery_app/models/pagination.dart';
 import 'package:grocery_app/models/product_filter.dart';
 
@@ -55,3 +57,6 @@ final relatedProductsProvider =
   final apiRepository = ref.watch(apiService);
   return apiRepository.getProducts(productFilterModel);
 });
+
+final cartItemsProvider = StateNotifierProvider<CartNotifier, CartState>(
+    (ref) => CartNotifier(ref.watch(apiService)));
