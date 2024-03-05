@@ -204,7 +204,7 @@ class APIService {
     var response = await client.post(uri,
         headers: requestHeaders,
         body: jsonEncode({
-          "product": [
+          "products": [
             {"product": productId, "qty": qty}
           ]
         }));
