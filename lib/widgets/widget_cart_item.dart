@@ -47,7 +47,7 @@ class CartItemWidget extends StatelessWidget {
                   fit: BoxFit.fill)),
         ),
         SizedBox(
-            width: 230,
+            width: 170,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.start,

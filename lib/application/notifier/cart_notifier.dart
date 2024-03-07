@@ -1,7 +1,11 @@
+import 'dart:collection';
+import 'dart:convert';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:grocery_app/api/api_service.dart';
 import 'package:grocery_app/application/state/cart_state.dart';
 
+import '../../models/cart.dart';
 import '../../models/cart_product.dart';
 
 class CartNotifier extends StateNotifier<CartState> {
@@ -32,9 +36,22 @@ class CartNotifier extends StateNotifier<CartState> {
     var isCartItemExist = state.cartModel!.products
         .firstWhere((element) => element.product.productId == productId);
 
-    var updatedItems = state.cartModel!;
-    updatedItems.products.remove(isCartItemExist);
-    state = state.copyWith(cartModel: updatedItems);
+    var updatedItems = Cart.copy(obj: state.cartModel!);
+    var data = jsonEncode(updatedItems.products);
+    var decodeData = jsonDecode(data);
+    //var productsList = Cart.fromJson(decodeData).products;
+    var b = (decodeData as List<dynamic>)
+        .map((productJson) =>
+            CartProduct.fromJson(productJson as Map<String, dynamic>))
+        .toList();
+
+    Cart updateCart = Cart(
+        cartId: state.cartModel!.cartId,
+        userId: state.cartModel!.userId,
+        products: b);
+    updateCart.products.toList().remove(isCartItemExist);
+
+    state = state.copyWith(cartModel: updateCart);
   }
 
   Future<void> updateQty(productId, qty, type) async {
@@ -50,10 +67,10 @@ class CartNotifier extends StateNotifier<CartState> {
         CartProduct cartProduct =
             CartProduct(qty: cartItem.qty - 1, product: cartItem.product);
 
-        updatedItems.products.remove(cartItem);
-        updatedItems.products.add(cartProduct);
+        updatedItems.products.toList().remove(cartItem);
+        updatedItems.products.toList().add(cartProduct);
       } else {
-        updatedItems.products.remove(cartItem);
+        updatedItems.products.toList().remove(cartItem);
       }
     } else {
       await _apiService.addCartItem(productId, 1);
@@ -61,8 +78,8 @@ class CartNotifier extends StateNotifier<CartState> {
       CartProduct cartProduct =
           CartProduct(qty: cartItem.qty + 1, product: cartItem.product);
 
-      updatedItems.products.remove(cartItem);
-      updatedItems.products.add(cartProduct);
+      updatedItems.products.toList().remove(cartItem);
+      updatedItems.products.toList().add(cartProduct);
     }
 
     state = state.copyWith(cartModel: updatedItems);

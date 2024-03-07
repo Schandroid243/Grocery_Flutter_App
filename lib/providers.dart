@@ -10,6 +10,7 @@ import '../models/category.dart';
 import '../models/product.dart';
 import 'application/notifier/product_notifier.dart';
 import 'application/state/product_state.dart';
+import 'models/cart_product.dart';
 import 'models/slider.dart';
 
 final categoriesProvider =

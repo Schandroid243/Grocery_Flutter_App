@@ -181,6 +181,7 @@ class APIService {
 
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
+
       return Cart.fromJson(data["data"]);
     } else if (response.statusCode == 401) {
       navigatorKey.currentState
@@ -219,6 +220,37 @@ class APIService {
     }
   }
 
+  // Future<bool?> removeCartItem(productId, qty) async {
+  //   var loginDetails = await SharedService.loginDetails();
+
+  //   Map<String, String> requestHeaders = {
+  //     'Content-Type': 'application/json',
+  //     'Authorization': 'Basic ${loginDetails!.data.token.toString()}'
+  //   };
+
+  //   var baseUrl = "${Config.apiUrl}/${Config.cartAPI}";
+  //   var uri = Uri.parse(baseUrl);
+
+  //   print("The item productId is: $productId and the qty is: $qty");
+
+  //   var response = await client.delete(uri,
+  //       headers: requestHeaders,
+  //       body: jsonEncode({
+  //         {"productId": productId, "qty": qty}
+  //       }));
+  //   print("The cart response is: $response");
+  //   if (response.statusCode == 200) {
+  //     print("The cart response is: $response");
+  //     return true;
+  //   } else if (response.statusCode == 401) {
+  //     navigatorKey.currentState
+  //         ?.pushNamedAndRemoveUntil("/login", (route) => false);
+  //   } else {
+  //     return null;
+  //   }
+  //   return null;
+  // }
+
   Future<bool?> removeCartItem(productId, qty) async {
     var loginDetails = await SharedService.loginDetails();
 
@@ -230,13 +262,14 @@ class APIService {
     var baseUrl = "${Config.apiUrl}/${Config.cartAPI}";
     var uri = Uri.parse(baseUrl);
 
+    print("The item productId is: $productId and the qty is: $qty");
+
     var response = await client.delete(uri,
         headers: requestHeaders,
-        body: jsonEncode({
-          {"productId": productId, "qty": qty}
-        }));
-
+        body: jsonEncode({"productId": productId, "qty": qty})); // Fix here
+    print("The cart response is: $response");
     if (response.statusCode == 200) {
+      print("The cart response is: $response");
       return true;
     } else if (response.statusCode == 401) {
       navigatorKey.currentState
@@ -244,5 +277,6 @@ class APIService {
     } else {
       return null;
     }
+    return null;
   }
 }
