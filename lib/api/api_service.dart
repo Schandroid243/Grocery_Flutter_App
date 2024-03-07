@@ -6,6 +6,8 @@ import 'package:grocery_app/models/login_response_model.dart';
 import 'package:grocery_app/utils/shared_service.dart';
 import 'package:http/http.dart' as http;
 
+import '../main.dart';
+import '../models/cart.dart';
 import '../models/category.dart';
 import '../models/product.dart';
 import '../models/product_filter.dart';
@@ -159,6 +161,86 @@ class APIService {
       var data = jsonDecode(response.body);
 
       return Product.fromJson(data["data"]);
+    } else {
+      return null;
+    }
+  }
+
+  Future<Cart?> getCart() async {
+    var loginDetails = await SharedService.loginDetails();
+
+    Map<String, String> requestHeaders = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Basic ${loginDetails!.data.token.toString()}'
+    };
+
+    var baseUrl = "${Config.apiUrl}/${Config.cartAPI}";
+    var uri = Uri.parse(baseUrl);
+
+    var response = await client.get(uri, headers: requestHeaders);
+
+    if (response.statusCode == 200) {
+      var data = jsonDecode(response.body);
+      return Cart.fromJson(data["data"]);
+    } else if (response.statusCode == 401) {
+      navigatorKey.currentState
+          ?.pushNamedAndRemoveUntil("/login", (route) => false);
+    } else {
+      return null;
+    }
+  }
+
+  Future<bool?> addCartItem(productId, qty) async {
+    var loginDetails = await SharedService.loginDetails();
+
+    Map<String, String> requestHeaders = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Basic ${loginDetails!.data.token.toString()}'
+    };
+
+    var baseUrl = "${Config.apiUrl}/${Config.cartAPI}";
+    var uri = Uri.parse(baseUrl);
+
+    var response = await client.post(uri,
+        headers: requestHeaders,
+        body: jsonEncode({
+          "products": [
+            {"product": productId, "qty": qty}
+          ]
+        }));
+
+    if (response.statusCode == 200) {
+      return true;
+    } else if (response.statusCode == 401) {
+      navigatorKey.currentState
+          ?.pushNamedAndRemoveUntil("/login", (route) => false);
+    } else {
+      return null;
+    }
+  }
+
+  Future<bool?> removeCartItem(productId, qty) async {
+    var loginDetails = await SharedService.loginDetails();
+
+    Map<String, String> requestHeaders = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Basic ${loginDetails!.data.token.toString()}'
+    };
+
+    var baseUrl = "${Config.apiUrl}/${Config.cartAPI}";
+    var uri = Uri.parse(baseUrl);
+
+    var response = await client.delete(uri,
+        headers: requestHeaders,
+        body: jsonEncode({
+          {"productId": productId, "qty": qty}
+        }));
+
+    if (response.statusCode == 200) {
+      return true;
+    } else if (response.statusCode == 401) {
+      navigatorKey.currentState
+          ?.pushNamedAndRemoveUntil("/login", (route) => false);
     } else {
       return null;
     }
