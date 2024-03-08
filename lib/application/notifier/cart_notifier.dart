@@ -37,7 +37,9 @@ class CartNotifier extends StateNotifier<CartState> {
       if (response!) {
         var isCartItemExist = state.cartModel!.products.firstWhere(
           (element) => element.product.productId == productId,
-          orElse: () => state.cartModel!.products.first,
+          orElse: () {
+            throw StateError("No matching element found");
+          },
         );
 
         var updatedItems = state.cartModel!.copyWith(
