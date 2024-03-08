@@ -38,7 +38,7 @@ class ProductCard extends StatelessWidget {
                     )),
                 GestureDetector(
                   child: SizedBox(
-                      height: 100,
+                      height: 80,
                       width: MediaQuery.of(context).size.width,
                       child: Image.network(model!.fullImagePath,
                           fit: BoxFit.cover)),
