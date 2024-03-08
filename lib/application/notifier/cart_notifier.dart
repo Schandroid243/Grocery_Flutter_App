@@ -31,35 +31,41 @@ class CartNotifier extends StateNotifier<CartState> {
   }
 
   Future<void> removeCartItem(productId, qty) async {
-    await _apiService.removeCartItem(productId, qty);
+    try {
+      final response = await _apiService.removeCartItem(productId, qty);
 
-    var isCartItemExist = state.cartModel!.products
-        .firstWhere((element) => element.product.productId == productId);
+      if (response!) {
+        var isCartItemExist = state.cartModel!.products.firstWhere(
+          (element) => element.product.productId == productId,
+          orElse: () => state.cartModel!.products.first,
+        );
 
-    var updatedItems = Cart.copy(obj: state.cartModel!);
-    var data = jsonEncode(updatedItems.products);
-    var decodeData = jsonDecode(data);
-    //var productsList = Cart.fromJson(decodeData).products;
-    var b = (decodeData as List<dynamic>)
-        .map((productJson) =>
-            CartProduct.fromJson(productJson as Map<String, dynamic>))
-        .toList();
-
-    Cart updateCart = Cart(
-        cartId: state.cartModel!.cartId,
-        userId: state.cartModel!.userId,
-        products: b);
-    updateCart.products.toList().remove(isCartItemExist);
-
-    state = state.copyWith(cartModel: updateCart);
+        var updatedItems = state.cartModel!.copyWith(
+          products: List.from(state.cartModel!.products)
+            ..remove(isCartItemExist),
+        );
+        state = state.copyWith(cartModel: updatedItems);
+      } else {
+        print('Error removing item');
+      }
+    } catch (e) {
+      print('Error removing item: $e');
+    }
   }
 
   Future<void> updateQty(productId, qty, type) async {
     var cartItem = state.cartModel!.products
         .firstWhere((element) => element.product.productId == productId);
 
-    var updatedItems = state.cartModel!;
+    var updatedItems = state.cartModel!.copyWith(
+      products: List.from(state.cartModel!.products),
+    );
 
+    var encodeData = jsonEncode(updatedItems);
+    var dataDecoded = jsonDecode(encodeData);
+
+    var updatedCart = Cart.fromJson(dataDecoded);
+    List<CartProduct> b = <CartProduct>[];
     if (type == "-") {
       await _apiService.removeCartItem(productId, 1);
 
@@ -67,10 +73,17 @@ class CartNotifier extends StateNotifier<CartState> {
         CartProduct cartProduct =
             CartProduct(qty: cartItem.qty - 1, product: cartItem.product);
 
-        updatedItems.products.toList().remove(cartItem);
-        updatedItems.products.toList().add(cartProduct);
+        b = updatedCart.products.toList();
+        b.remove(cartItem);
+        b.add(cartProduct);
+        updatedItems = state.cartModel!.copyWith(
+          products: b,
+        );
       } else {
-        updatedItems.products.toList().remove(cartItem);
+        b.remove(cartItem);
+        updatedItems = state.cartModel!.copyWith(
+          products: b,
+        );
       }
     } else {
       await _apiService.addCartItem(productId, 1);
@@ -78,8 +91,12 @@ class CartNotifier extends StateNotifier<CartState> {
       CartProduct cartProduct =
           CartProduct(qty: cartItem.qty + 1, product: cartItem.product);
 
-      updatedItems.products.toList().remove(cartItem);
-      updatedItems.products.toList().add(cartProduct);
+      b = updatedCart.products.toList();
+      b.remove(cartItem);
+      b.add(cartProduct);
+      updatedItems = state.cartModel!.copyWith(
+        products: b,
+      );
     }
 
     state = state.copyWith(cartModel: updatedItems);

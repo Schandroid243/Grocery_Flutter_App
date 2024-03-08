@@ -25,16 +25,6 @@ abstract class Cart with _$Cart {
       products: myArgs,
     );
   }
-
-  static Cart gotIt(Map<String, dynamic> json) {
-    return Cart(
-      userId: json['userId'] as String,
-      cartId: json['cartId'] as String,
-      products: (json['products'] as List<dynamic>)
-          .map((productJson) => CartProduct.fromJson(productJson))
-          .toList(),
-    );
-  }
 }
 
 extension CartExt on Cart {

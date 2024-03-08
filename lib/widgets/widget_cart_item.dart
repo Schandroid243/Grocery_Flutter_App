@@ -79,13 +79,15 @@ class CartItemWidget extends StatelessWidget {
                       width: 20,
                     ),
                     Padding(
+                      //onItemRemove!(model)
                       padding: const EdgeInsets.only(top: 5.0),
-                      child: GestureDetector(
-                        onTap: onItemRemove!(model),
-                        child: const Icon(
-                          Icons.delete,
-                          color: Colors.red,
-                        ),
+                      child: TextButton(
+                        onPressed: () {
+                          if (onItemRemove != null) {
+                            onItemRemove!(model);
+                          }
+                        },
+                        child: const Text('Delete'),
                       ),
                     )
                   ],

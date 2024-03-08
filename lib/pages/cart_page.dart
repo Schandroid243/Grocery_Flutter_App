@@ -51,7 +51,13 @@ class _CartPageState extends ConsumerState<CartPage> {
             },
             onItemRemove: (CartProduct model) {
               final cartViewModel = ref.read(cartItemsProvider.notifier);
-              cartViewModel.removeCartItem(model.product.productId, model.qty);
+              final productId = model.product.productId;
+              if (cartProducts
+                  .any((item) => item.product.productId == productId)) {
+                cartViewModel.removeCartItem(productId, model.qty);
+              } else {
+                print('Item with productId $productId not found in the cart.');
+              }
             },
           );
         });
