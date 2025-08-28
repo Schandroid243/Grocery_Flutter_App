@@ -56,6 +56,7 @@ Ideal as a **portfolio project** to showcase mobile development skills.
    ```bash
    git clone https://github.com/Schandroid243/Grocery_Flutter_App.git
    cd Grocery_Flutter_App
+   git checkout dev
 2. **Install dependencies**
    ```bash
    flutter pub get
