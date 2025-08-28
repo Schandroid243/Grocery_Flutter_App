@@ -1,6 +1,6 @@
 # Grocery Flutter App
 
-A **cross-platform Flutter mobile app** for a grocery e-commerce platform.  
+A **cross-platform Flutter mobile app** for the Ecomly e-commerce platform.  
 Built with **Provider state management**, a clean modular architecture, and full integration with the [Grocery Node.js API](https://github.com/Schandroid243/Grocery_NodeJs_Api).  
 
 ---
